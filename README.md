@@ -1,4 +1,4 @@
-Certainly! Here’s an in-depth explanation of the provided document about **Debezium**, an open-source platform for Change Data Capture (CDC).
+Here’s an in-depth explanation of the provided document about **Debezium**, an open-source platform for Change Data Capture (CDC).
 
 ---
 

@@ -1,4 +1,4 @@
-Here’s a sample `pom.xml` file for a Spring Boot application that meets your requirements, including dependencies for Spring Boot 2.7.2, Java 17 support, and various features like OpenAPI 3, Spring Actuator, Spring Sleuth, Redis, Kafka, and H2 in-memory database. Additionally, it includes configuration for building both fat and thin JAR files and a Dockerfile setup.
+Here’s a sample `pom.xml` file for a Spring Boot application that meets your requirements, including dependencies for Spring Boot 3.3.4, Java 17 support, and various features like OpenAPI 3, Spring Actuator, Spring Sleuth, Redis, Kafka, and H2 in-memory database. Additionally, it includes configuration for building both fat and thin JAR files and a Dockerfile setup.
 
 ---
 

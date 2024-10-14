@@ -100,6 +100,10 @@ A REST API (Representational State Transfer Application Programming Interface) i
 ### Conclusion
 By following these best practices, you can create RESTful APIs that are easy to use, maintain, and scale. Emphasizing clarity, consistency, and security will lead to better experiences for both developers and users.
 
+---
+
+## API Versioning
+
 API versioning is crucial for maintaining backward compatibility while allowing for the evolution of your API. Here’s a breakdown of the different strategies for versioning REST APIs, along with their pros and cons.
 
 ### 1. **URI Versioning**

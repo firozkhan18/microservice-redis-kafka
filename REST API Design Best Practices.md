@@ -1,5 +1,9 @@
 Mastering REST API design involves understanding best practices that enhance usability, performance, and maintainability. Here’s a comprehensive guide covering key principles and best practices for designing RESTful APIs:
 
+### What is a REST API?
+A REST API (Representational State Transfer Application Programming Interface) is a set of rules that enables communication between different software applications. RESTful APIs rely on a stateless, client-server architecture and are used to interact with web services by making HTTP requests to access and manipulate data.
+
+
 ### 1. **Use Meaningful Resource URIs**
    - **Descriptive URIs**: Use nouns to represent resources. Avoid verbs.
      - **Good**: `/api/users`

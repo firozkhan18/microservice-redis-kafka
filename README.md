@@ -472,5 +472,125 @@ It acknowledges contributors and provides a visual representation of community i
 
 5. Start Application
 ```
+
+### 1. **General Information**
+- **build.number**: Indicates the build number of the application.
+- **build.date**: The date and time when the application was built.
+
+### 2. **Spring Profile**
+- **spring.profiles.default**: Sets the default Spring profile for the application, which can alter configurations based on the environment (e.g., `dev`, `prod`).
+
+### 3. **Service Name & API Details**
+- **service.org**: Organization or team name.
+- **service.name**: Name of the microservice.
+- **service.api.name**: Name of the API.
+- **service.api.prefix**: Prefix for the API endpoints (e.g., `api`).
+- **service.api.version**: Version of the API (e.g., `v1`).
+- **service.api.error.prefix**: Prefix used for error codes.
+- **service.container**: Name of the container or service in orchestration tools.
+- **service.api.repository**: URL to the repository containing the API code.
+- **service.api.path**: Full path for API access, derived from other properties.
+- **service.url**: Base URL for the service.
+- **service.license**: License under which the service is distributed.
+
+### 4. **Microservice Server Properties**
+- **server.port**: Port on which the service will run (e.g., `9090`).
+- **server.version**: Version of the server.
+- **server.restart**: Flag to indicate if the server should restart automatically.
+- **server.leak.test**: Possibly related to memory leak testing intervals.
+- **server.resources.url**: Combined URL for accessing server resources.
+
+### 5. **Security & JWT Token**
+- **server.crypto.public.key**: Path to the public key used for JWT token encryption.
+- **server.crypto.private.key**: Path to the private key used for JWT token signing.
+- **server.token.issuer**: Issuer of the JWT tokens.
+- **server.token.type**: Type of token (1 for secret key, 2 for public/private key).
+- **server.token.test**: Flag indicating if token testing is enabled.
+- **server.token.auth.expiry**: Expiration time for authentication tokens (in milliseconds).
+- **server.token.refresh.expiry**: Expiration time for refresh tokens (in milliseconds).
+- **server.token.key**: Secret key used for token encryption.
+- **server.secure.data.key**: Key for securing sensitive data.
+
+### 6. **Host Details**
+- **server.host**: Base hostname for the service.
+- **server.host.dev**: Development server URL.
+- **server.host.dev.desc**: Description for the development server.
+- **server.host.uat**: UAT (User Acceptance Testing) server URL.
+- **server.host.uat.desc**: Description for the UAT server.
+- **server.host.prod**: Production server URL.
+- **server.host.prod.desc**: Description for the production server.
+- **server.error.whitelabel.enabled**: Flag to enable/disable the whitelabel error page.
+
+### 7. **Service Properties Details**
+- **spring.codec.max-in-memory-size**: Maximum size for in-memory codecs.
+- **app.property.list**: Comma-separated list of application properties.
+- **app.property.map**: Map of key-value pairs for application properties.
+
+### 8. **Log Details**
+- **server.dev.mode**: Indicates if the application is running in development mode.
+- **logging.level.root**: Root logging level (e.g., INFO).
+- **logging.config**: Location of the logging configuration file.
+- **logging.path**: Directory for log files.
+- **logging.file.name**: Name of the log file.
+- **logging.pattern.rolling-file-name**: Pattern for rolling log files.
+- **logging.file.max-size**: Maximum size of log files.
+- **logging.file.max-history**: Number of days to retain log files.
+- **logging.file.total-size-cap**: Maximum total size for log files.
+
+### 9. **Kafka Pub/Sub Configuration**
+- **spring.application.name**: Name of the Spring application.
+- **spring.kafka.bootstrap-servers**: Kafka bootstrap servers for connecting.
+- **kafka.consumer.group.1** and **.2**: Consumer group names for Kafka.
+- **kafka.topic.1.create**: Indicates if Topic 1 should be created.
+- **kafka.topic.1**, **.2**: Names of Kafka topics.
+- **kafka.topic.1.partitions**: Number of partitions for Topic 1.
+- **kafka.topic.1.replica**: Number of replicas for Topic 1.
+- **kafka.topic.1.acks**: Acknowledgment level for Topic 1.
+
+### 10. **Kafka Connect Configuration**
+- **kafka.connect.url**: URL for the Kafka Connect API.
+- **kafka.connect.class**: Class for the connector being used.
+- **kafka.connect.db.host**, **.port**, **.user**, **.password**, **.name**: Database connection details.
+- **kafka.connect.table.include.list**: List of tables to include in the connector.
+- **kafka.connect.topic.replica**, **.partition**, **.prefix**, **.slot.name**: Configuration for replication and topic names.
+
+### 11. **Kafka Streams Configuration**
+- **spring.kafka.streams.auto-startup**: Automatically start Kafka Streams on application startup.
+- **kafka.streams.topic.1.create**: Indicates if Topic 1 for streams should be created.
+- **kafka.streams.topic.1**, **.2**, **.3**: Names of Kafka Streams topics.
+- **kafka.streams.topic.1.partitions**: Number of partitions for Kafka Streams Topic 1.
+
+### 12. **Database Properties**
+- **db.server**, **.port**, **.name**, **.schema**, **.vendor**: Database configuration details.
+- **spring.datasource.url**: JDBC URL for the database.
+- **spring.datasource.driverClassName**: Driver class name for the database.
+- **spring.datasource.username**, **.password**: Credentials for connecting to the database.
+- **spring.jpa.database-platform**: Specifies the database dialect for JPA.
+- **spring.datasource.hikari.connection-test-query**: Query to test database connections.
+
+### 13. **JPA / Hibernate Properties**
+- **spring.jpa.show-sql**: Flag to show SQL statements in logs.
+- **spring.jpa.defer-datasource-initialization**: Delays initialization of the datasource.
+- **spring.jpa.hibernate.ddl-auto**: Specifies how Hibernate should handle schema generation.
+- **spring.jpa.properties.hibernate.format_sql**: Flag to format SQL queries in logs.
+- **spring.jpa.properties.hibernate.validator.apply_to_ddl**: Controls whether validation applies to the database schema.
+
+### 14. **External Remote Server Properties**
+- **payment.gateway.host**, **.port**: Host and port for external payment gateways.
+- **remote.host**, **.port**, **.protocol**: Configuration for remote service connections.
+
+### 15. **Open API Properties**
+- **springdoc.api-docs.path**: Path for API documentation.
+- **springdoc.swagger-ui.path**: Path for Swagger UI.
+- Various other properties to configure Swagger UI and OpenAPI.
+
+### 16. **Mongo Properties**
+- **spring.data.mongodb.uri**: URI for connecting to a MongoDB database.
+
+### 17. **Mongock Properties**
+- **mongock.change-logs-scan-package**: Package to scan for MongoDB change logs.
+
+This configuration file provides comprehensive details about the microservice, its dependencies, logging settings, Kafka configuration, database setup, and more, facilitating development and deployment. Let me know if you need more specific details on any section!
+
 ### Conclusion
 The document provides comprehensive insights into Debezium, outlining its purpose, architecture, use cases, building instructions, and community engagement. It emphasizes how Debezium addresses common challenges in data streaming and change data capture, making it a valuable tool for developers working with real-time data integration and processing.

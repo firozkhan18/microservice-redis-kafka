@@ -228,7 +228,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the JAR file
-COPY target/springboot-microservice-template-0.0.1-SNAPSHOT.jar app.jar
+COPY target/microservice-redis-kafka-0.0.1-SNAPSHOT.jar app.jar
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]

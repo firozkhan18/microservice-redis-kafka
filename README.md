@@ -460,5 +460,17 @@ It acknowledges contributors and provides a visual representation of community i
 
 ---
 
+## Execution Application Steps
+```
+1. D:\kafka>.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+
+2. D:\kafka>.\bin\windows\kafka-server-start.bat .\config\server.properties
+
+3. Start PostgreSQL Sever
+
+4. D:\kafka>.\bin\windows\connect-distributed.bat .\config\connect-distributed.properties
+
+5. Start Application
+``
 ### Conclusion
 The document provides comprehensive insights into Debezium, outlining its purpose, architecture, use cases, building instructions, and community engagement. It emphasizes how Debezium addresses common challenges in data streaming and change data capture, making it a valuable tool for developers working with real-time data integration and processing.

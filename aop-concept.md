@@ -385,7 +385,7 @@ The pointcut expression `value = "execution(* com.springboot.microservice.contro
 - **`.*(..)`**: This means that you want to match any method (the final `*`) with any parameters (the `(..)` signifies any number of arguments of any type).
 
 ### Overall Meaning
-The complete pointcut expression matches **all methods** in **any class** within the `com.springboot.microservice.adapters.controllers` package, regardless of the method's return type or parameters.
+The complete pointcut expression matches **all methods** in **any class** within the `com.springboot.microservice.controllers` package, regardless of the method's return type or parameters.
 
 ### Example Usage
 Here’s how you might use this pointcut in an aspect:

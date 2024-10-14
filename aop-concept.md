@@ -323,3 +323,49 @@ AOP helps manage cross-cutting concerns effectively by separating them from busi
 - **Weaving**: The process of integrating aspects into the code.
 
 These concepts work together to create a modular and maintainable codebase.
+
+The two pointcut expressions you've provided define different scopes for applying advice in Aspect-Oriented Programming (AOP). Here's a breakdown of each:
+
+### 1. `@Pointcut("execution(* com.example.service.UserService.*(..))")`
+
+- **Meaning**: This pointcut matches **all methods** in the `UserService` class, regardless of their return type, name, or parameters.
+- **Usage**: This is useful when you want to apply advice to every method in the `UserService` class. For example, if you want to log every method call, handle exceptions uniformly, or enforce security checks for all methods, this pointcut would be appropriate.
+
+### Example of Usage
+```java
+@Aspect
+public class LoggingAspect {
+    @Pointcut("execution(* com.example.service.UserService.*(..))")
+    public void userServiceMethods() {}
+
+    @Before("userServiceMethods()")
+    public void logBefore(JoinPoint joinPoint) {
+        System.out.println("Before executing: " + joinPoint.getSignature());
+    }
+}
+```
+
+### 2. `pointcut = "execution(* com.example.service.UserService.addUser(..))"`
+
+- **Meaning**: This pointcut matches **only the `addUser` method** in the `UserService` class, regardless of its return type or parameters.
+- **Usage**: This is useful when you want to apply advice specifically to the `addUser` method. For example, if you want to perform validation or logging for just this method, you would use this more specific pointcut.
+
+### Example of Usage
+```java
+@Aspect
+public class UserServiceAspect {
+    @Pointcut("execution(* com.example.service.UserService.addUser(..))")
+    public void addUserMethod() {}
+
+    @Before("addUserMethod()")
+    public void validateBeforeAddUser(JoinPoint joinPoint) {
+        System.out.println("Validating before adding user: " + joinPoint.getArgs()[0]);
+    }
+}
+```
+
+### Summary
+- The first pointcut targets **all methods** in `UserService`, making it broad and suitable for general logging or cross-cutting concerns.
+- The second pointcut targets **only the `addUser` method**, allowing for more targeted advice applicable to that specific method.
+
+Choosing between them depends on the level of granularity you need for your cross-cutting concerns.

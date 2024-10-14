@@ -369,3 +369,46 @@ public class UserServiceAspect {
 - The second pointcut targets **only the `addUser` method**, allowing for more targeted advice applicable to that specific method.
 
 Choosing between them depends on the level of granularity you need for your cross-cutting concerns.
+
+The pointcut expression `value = "execution(* com.springboot.microservice.controllers.*.*(..))"` is used to match method executions within a specific package in an Aspect-Oriented Programming (AOP) context. Here’s a breakdown of its components:
+
+### Breakdown of the Expression
+
+- **`execution(...)`**: This indicates that you are specifying a join point that occurs at the execution of a method.
+
+- **`*` (First `*`)**: This represents the return type of the methods you want to match. The asterisk here means "any return type." So, it will match methods that can return any type (void, Integer, String, etc.).
+
+- **`com.springboot.microservice.controllers`**: This is the package where you want to look for the methods. In this case, it’s the `controllers` package within the `adapters` and `microservice` sub-packages.
+
+- **`*` (Second `*`)**: This matches the name of the class within the specified package. Again, the asterisk means "any class name."
+
+- **`.*(..)`**: This means that you want to match any method (the final `*`) with any parameters (the `(..)` signifies any number of arguments of any type).
+
+### Overall Meaning
+The complete pointcut expression matches **all methods** in **any class** within the `com.springboot.microservice.adapters.controllers` package, regardless of the method's return type or parameters.
+
+### Example Usage
+Here’s how you might use this pointcut in an aspect:
+
+```java
+@Aspect
+public class ControllerLoggingAspect {
+
+    @Pointcut("execution(* com.springboot.microservice.controllers.*.*(..))")
+    public void controllerMethods() {}
+
+    @Before("controllerMethods()")
+    public void logBefore(JoinPoint joinPoint) {
+        System.out.println("Before executing: " + joinPoint.getSignature());
+    }
+
+    @AfterReturning(pointcut = "controllerMethods()", returning = "result")
+    public void logAfter(JoinPoint joinPoint, Object result) {
+        System.out.println("After executing: " + joinPoint.getSignature() + " returned: " + result);
+    }
+}
+```
+
+### Summary
+- This pointcut is useful for logging, security, or any cross-cutting concerns that apply to all methods in your controllers.
+- By using such a broad pointcut, you can easily manage concerns that apply across multiple classes and methods without duplicating code.

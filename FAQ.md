@@ -20,6 +20,84 @@ Here’s a collection of common Docker and Kubernetes interview questions along 
 6. **How do you manage persistent data in Docker?**
    - **Answer**: Persistent data can be managed in Docker using volumes or bind mounts. Volumes are stored in a part of the host filesystem managed by Docker, while bind mounts allow you to specify an exact path on the host.
 
+### Dockerfile vs. docker-compose.yml
+
+Both `Dockerfile` and `docker-compose.yml` are essential components of Docker, but they serve different purposes in the containerization ecosystem. Here’s a breakdown of their differences and uses:
+
+#### Dockerfile
+
+1. **Purpose**:
+   - A `Dockerfile` is used to define a single Docker image. It contains instructions on how to build that image, specifying the base image, environment variables, commands, and files to be included.
+
+2. **Syntax**:
+   - It consists of a series of commands, each defining a step in the image-building process. Common commands include:
+     - `FROM`: Specifies the base image.
+     - `RUN`: Executes commands in the container during the image build process.
+     - `COPY` / `ADD`: Adds files from the host into the image.
+     - `CMD` / `ENTRYPOINT`: Specifies the command to run when a container starts.
+
+3. **Example**:
+   ```dockerfile
+   # Dockerfile
+   FROM node:14
+   WORKDIR /app
+   COPY package.json .
+   RUN npm install
+   COPY . .
+   CMD ["node", "server.js"]
+   ```
+
+4. **Usage**:
+   - You use the `docker build` command to create an image from the Dockerfile. For example:
+     ```bash
+     docker build -t my-node-app .
+     ```
+
+#### docker-compose.yml
+
+1. **Purpose**:
+   - A `docker-compose.yml` file is used to define and manage multi-container Docker applications. It specifies how different services (containers) in an application interact with each other and their configurations.
+
+2. **Syntax**:
+   - It uses YAML format and defines services, networks, and volumes. Key components include:
+     - `services`: Defines the different containers (services) that make up the application.
+     - `volumes`: Defines data storage options for the services.
+     - `networks`: Specifies custom networks for inter-service communication.
+
+3. **Example**:
+   ```yaml
+   # docker-compose.yml
+   version: '3'
+   services:
+     web:
+       build: .
+       ports:
+         - "3000:3000"
+     db:
+       image: postgres
+       environment:
+         POSTGRES_PASSWORD: example
+   ```
+
+4. **Usage**:
+   - You use the `docker-compose up` command to start the entire application defined in the `docker-compose.yml` file:
+     ```bash
+     docker-compose up
+     ```
+
+### Key Differences
+
+| Feature                      | Dockerfile                                      | docker-compose.yml                            |
+|------------------------------|------------------------------------------------|----------------------------------------------|
+| Purpose                      | Defines how to build a single Docker image     | Defines multi-container applications         |
+| Format                       | Plain text with specific Docker commands       | YAML format with services, networks, volumes |
+| Components                   | Single image, configuration for that image     | Multiple services, each can have its own configuration |
+| Command to Build/Run        | `docker build` to create an image              | `docker-compose up` to start all services    |
+| Level of Abstraction         | Low-level, image-focused                        | High-level, application-focused              |
+
+### Conclusion
+
+In summary, use a `Dockerfile` to create and configure a single image and use `docker-compose.yml` to orchestrate multi-container applications. They complement each other: the Dockerfile describes how to build images, while the `docker-compose.yml` file manages those images as services in a cohesive application.
 ### Kubernetes Interview Questions
 
 1. **What is Kubernetes?**

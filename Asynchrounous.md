@@ -424,3 +424,126 @@ public class GlobalExceptionHandler {
 4. **Centralized Error Handling**: Use a global exception handler to manage unexpected errors.
 
 This approach will help you provide clear and meaningful responses to clients while maintaining a robust and maintainable application architecture.
+
+---
+Using parallel streams in Java can simplify and improve the performance of operations that can be executed concurrently. In the context of your Spring Boot application, particularly when processing orders, you can leverage parallel streams to handle multiple asynchronous tasks more efficiently.
+
+### 1. Using Parallel Streams in Order Processing
+
+Instead of calling each service method sequentially, you can use a parallel stream to invoke them concurrently. Here’s how to modify the `OrderController` to utilize parallel streams for processing order notifications, vendor assignments, packaging, etc.
+
+### Modified OrderController
+
+```java
+@PostMapping
+public ResponseEntity<ApiResponse<Order>> processOrder(@RequestBody Order order) {
+    try {
+        Order processedOrder = service.processOrder(order); // synchronous
+
+        // Collecting tasks into a list and using parallel stream to process them concurrently
+        List<Runnable> tasks = List.of(
+            () -> service.notifyUser(order),
+            () -> service.assignVendor(order),
+            () -> service.packaging(order),
+            () -> service.assignDeliveryPartner(order),
+            () -> service.assignTrailerAndDispatch(order)
+        );
+
+        // Using parallel stream to execute tasks concurrently
+        tasks.parallelStream().forEach(Runnable::run);
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "Order processed successfully.", processedOrder));
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body(new ApiResponse<>(false, "Failed to process order: " + e.getMessage(), null));
+    }
+}
+```
+
+### Explanation
+
+- **Task Collection**: Each service call is wrapped in a `Runnable` and collected into a list called `tasks`.
+- **Parallel Stream Execution**: The `tasks.parallelStream().forEach(Runnable::run)` statement executes each task in parallel. This allows the methods `notifyUser`, `assignVendor`, etc., to run concurrently, taking advantage of available CPU resources.
+
+### 2. Considerations for Using Parallel Streams
+
+While parallel streams can enhance performance, there are some considerations to keep in mind:
+
+- **Thread Safety**: Ensure that the operations performed by the service methods are thread-safe. If they modify shared resources, you might run into concurrency issues.
+- **Resource Management**: Be cautious about the number of parallel tasks you create. If each task is resource-intensive, it can lead to contention and degrade performance instead of improving it.
+- **Error Handling**: Since tasks run in parallel, catching exceptions from each task can be tricky. You might need to implement a way to collect and handle exceptions from each task.
+
+### 3. Handling Errors in Parallel Stream
+
+If you want to handle errors from each task, consider using a more advanced approach:
+
+```java
+@PostMapping
+public ResponseEntity<ApiResponse<Order>> processOrder(@RequestBody Order order) {
+    try {
+        Order processedOrder = service.processOrder(order); // synchronous
+
+        List<String> errors = Collections.synchronizedList(new ArrayList<>());
+
+        List<Runnable> tasks = List.of(
+            () -> {
+                try {
+                    service.notifyUser(order);
+                } catch (Exception e) {
+                    errors.add("Notify User: " + e.getMessage());
+                }
+            },
+            () -> {
+                try {
+                    service.assignVendor(order);
+                } catch (Exception e) {
+                    errors.add("Assign Vendor: " + e.getMessage());
+                }
+            },
+            () -> {
+                try {
+                    service.packaging(order);
+                } catch (Exception e) {
+                    errors.add("Packaging: " + e.getMessage());
+                }
+            },
+            () -> {
+                try {
+                    service.assignDeliveryPartner(order);
+                } catch (Exception e) {
+                    errors.add("Assign Delivery Partner: " + e.getMessage());
+                }
+            },
+            () -> {
+                try {
+                    service.assignTrailerAndDispatch(order);
+                } catch (Exception e) {
+                    errors.add("Assign Trailer and Dispatch: " + e.getMessage());
+                }
+            }
+        );
+
+        // Execute tasks in parallel
+        tasks.parallelStream().forEach(Runnable::run);
+
+        if (!errors.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                 .body(new ApiResponse<>(false, "Errors occurred: " + String.join(", ", errors), null));
+        }
+
+        return ResponseEntity.ok(new ApiResponse<>(true, "Order processed successfully.", processedOrder));
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body(new ApiResponse<>(false, "Failed to process order: " + e.getMessage(), null));
+    }
+}
+```
+
+### Summary
+
+1. **Parallel Execution**: Use parallel streams to run service methods concurrently.
+2. **Thread Safety**: Ensure that your methods are thread-safe.
+3. **Error Handling**: Capture and report errors from parallel tasks.
+4. **Performance Consideration**: Test performance impacts as parallel execution may not always yield better results, depending on the workload and system resources.
+
+This approach will help you efficiently handle multiple asynchronous tasks during order processing, improving the responsiveness of your application.

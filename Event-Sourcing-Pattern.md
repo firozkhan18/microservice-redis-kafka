@@ -1,4 +1,8 @@
-# Event Sourcing Design Pattern. 
+# Event Sourcing
+
+Event sourcing is a software architectural pattern that stores the state of an application as a sequence of events rather than as a single current state. Each event represents a state change that has occurred in the system. This approach provides a more detailed history of how an application reached its current state and allows for greater flexibility in managing state changes.
+
+### Event Sourcing Design Pattern. 
 
 This diagram illustrates how events are stored and how they drive the state of the application.
 
@@ -30,12 +34,7 @@ graph TD
 - **Application State**: The current state of the application derived from the read model.
 - **Microservices**: Services (Service A and Service B) that subscribe to events from the event store and update their own states based on those events.
 
-### How to Use the Diagram
-
-You can render this diagram using a Mermaid live editor or in environments that support Mermaid syntax, such as Markdown documents or certain documentation tools. It effectively illustrates how event sourcing operates within a microservices architecture, showing the flow from user actions to the eventual application state.
-
 ---
-Event sourcing is a software architectural pattern that stores the state of an application as a sequence of events rather than as a single current state. Each event represents a state change that has occurred in the system. This approach provides a more detailed history of how an application reached its current state and allows for greater flexibility in managing state changes.
 
 ### Key Concepts of Event Sourcing
 

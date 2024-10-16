@@ -872,6 +872,80 @@ var x = 5;
 console.log(y); // ReferenceError: Cannot access 'y' before initialization
 let y = 10;
 ```
+Hoisting in JavaScript is a behavior where variable and function declarations are moved to the top of their containing scope during the compile phase. This means that you can reference variables and functions before they are declared in the code. However, only declarations are hoisted, not initializations.
+
+### Example of Hoisting
+
+Let’s illustrate hoisting with both variable and function declarations:
+
+#### Code Example
+
+```javascript
+console.log(myVar); // Output: undefined
+var myVar = 5;
+
+console.log(myFunction()); // Output: "Hello, World!"
+function myFunction() {
+    return "Hello, World!";
+}
+
+console.log(myLetVar); // ReferenceError: Cannot access 'myLetVar' before initialization
+let myLetVar = 10;
+```
+
+### Breakdown
+
+1. **Variable Hoisting**:
+   - The `var` declaration of `myVar` is hoisted to the top of the scope, but its initialization (`myVar = 5`) is not.
+   - When you try to log `myVar` before its declaration, it returns `undefined` because the variable is declared but not yet initialized.
+
+2. **Function Hoisting**:
+   - The entire function declaration of `myFunction` is hoisted, meaning you can call the function before its definition in the code.
+   - Thus, `console.log(myFunction())` works and outputs `"Hello, World!"`.
+
+3. **Let/Const Hoisting**:
+   - The `let` declaration (`myLetVar`) is also hoisted, but it remains in a "temporal dead zone" until it is initialized. This is why accessing it before the declaration results in a `ReferenceError`.
+
+### Diagram of Hoisting
+
+Here’s a simplified diagram representing hoisting:
+
+```
+Before Hoisting (Original Code)
+-----------------------------------
+console.log(myVar); 
+var myVar = 5;
+
+console.log(myFunction());
+function myFunction() {
+    return "Hello, World!";
+}
+
+console.log(myLetVar);
+let myLetVar = 10;
+
+After Hoisting
+-----------------------------------
+var myVar; // Declaration is hoisted
+function myFunction() {
+    return "Hello, World!";
+}
+
+console.log(myVar); // Outputs: undefined
+myVar = 5; // Initialization remains in original order
+
+console.log(myFunction()); // Outputs: "Hello, World!"
+
+let myLetVar; // Declaration is hoisted but not initialized
+console.log(myLetVar); // ReferenceError: Cannot access 'myLetVar' before initialization
+myLetVar = 10; // Initialization remains in original order
+```
+
+### Summary
+
+- **Declarations** (variables with `var` and functions) are hoisted to the top of their scope.
+- **Initializations** are not hoisted; they retain their original order in the code.
+- `let` and `const` declarations are also hoisted, but they cannot be accessed before their declaration due to the temporal dead zone.
 
 ### Differences Between `var`, `let`, and `const`
 

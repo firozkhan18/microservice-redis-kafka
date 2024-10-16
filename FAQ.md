@@ -468,6 +468,68 @@ Here’s a comprehensive list of common Java 8 interview questions along with co
       ```
 Here’s a collection of common interview questions and answers related to Spring Boot and microservices:
 
+### Thread Pooling
+
+**Definition:**
+Thread pooling is a technique used in multithreading environments to manage and reuse threads for executing tasks. Instead of creating and destroying threads for each task, a pool of pre-instantiated threads is maintained. This improves performance and resource management, particularly in applications that require handling multiple concurrent tasks.
+
+### Key Concepts
+
+1. **Thread Pool:**
+   - A collection of worker threads that efficiently execute tasks.
+   - Threads in the pool are reused for multiple tasks, reducing the overhead of thread creation and destruction.
+
+2. **Task Queue:**
+   - A queue where tasks are submitted for execution.
+   - If all threads in the pool are busy, incoming tasks are added to the queue until a thread becomes available.
+
+3. **Thread Pool Manager:**
+   - Manages the lifecycle of threads in the pool, including creation, execution, and termination.
+   - Configurable parameters such as the number of threads, maximum pool size, and timeout settings.
+
+### Advantages of Thread Pooling
+
+- **Improved Performance:** Reduces the overhead associated with thread creation and destruction.
+- **Resource Management:** Limits the number of concurrent threads, preventing resource exhaustion.
+- **Scalability:** Can adapt to varying workloads by adjusting the number of active threads.
+- **Responsiveness:** Tasks can be executed quickly as threads are readily available.
+
+### Implementation in Java
+
+In Java, the `ExecutorService` framework provides a simple way to implement thread pooling. Here’s a basic example:
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ThreadPoolExample {
+    public static void main(String[] args) {
+        // Create a thread pool with a fixed number of threads
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
+
+        // Submit tasks to the thread pool
+        for (int i = 0; i < 10; i++) {
+            final int taskId = i;
+            executorService.submit(() -> {
+                System.out.println("Task " + taskId + " is being executed by " + Thread.currentThread().getName());
+                try {
+                    // Simulate work with sleep
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+
+        // Shutdown the executor service
+        executorService.shutdown();
+    }
+}
+```
+
+### Conclusion
+
+Thread pooling is a valuable design pattern for managing threads efficiently in concurrent programming. By reusing threads and minimizing overhead, it enhances application performance and responsiveness, making it a critical component in high-performance and scalable applications.
 ### Spring Boot and Microservices Interview Questions
 
 1. **What is Spring Boot?**

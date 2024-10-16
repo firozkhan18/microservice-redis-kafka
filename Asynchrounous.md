@@ -426,6 +426,174 @@ public class GlobalExceptionHandler {
 This approach will help you provide clear and meaningful responses to clients while maintaining a robust and maintainable application architecture.
 
 ---
+
+In a Saga pattern using choreography, each service handles its own transactions and publishes events to notify other services about the outcome. This approach allows for asynchronous interactions between services, where the response from one service can serve as the input for another service.
+
+### Key Concepts
+
+1. **Event-Driven Architecture**: Services communicate through events. When a service completes a task, it emits an event indicating success or failure.
+2. **Event Handlers**: Other services listen for specific events and take action based on the event's payload.
+
+### Example Scenario
+
+Consider an order processing workflow where:
+
+1. **Order Service** creates an order.
+2. **Inventory Service** checks product availability based on the order.
+3. **Payment Service** processes payment based on the order details.
+
+If any step fails, the workflow should handle compensatory actions accordingly.
+
+### Implementation Steps
+
+1. **Define Events**: Create event classes for different states (success and failure).
+
+```java
+public class OrderCreatedEvent {
+    private final Order order;
+
+    public OrderCreatedEvent(Order order) {
+        this.order = order;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+}
+
+public class OrderFailedEvent {
+    private final Order order;
+    private final String reason;
+
+    public OrderFailedEvent(Order order, String reason) {
+        this.order = order;
+        this.reason = reason;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+}
+```
+
+2. **Publish Events**: After completing each task, services publish events.
+
+```java
+@Service
+public class OrderService {
+
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
+
+    public void createOrder(Order order) {
+        // Order creation logic
+        eventPublisher.publishEvent(new OrderCreatedEvent(order));
+    }
+}
+```
+
+3. **Subscribe to Events**: Other services listen for these events and act accordingly.
+
+```java
+@Service
+public class InventoryService {
+
+    @EventListener
+    public void handleOrderCreated(OrderCreatedEvent event) {
+        Order order = event.getOrder();
+        if (checkProductAvailability(order.getProductId())) {
+            // Publish success event for payment processing
+            eventPublisher.publishEvent(new PaymentInitiatedEvent(order));
+        } else {
+            // Publish failure event
+            eventPublisher.publishEvent(new OrderFailedEvent(order, "Product not available"));
+        }
+    }
+}
+```
+
+4. **Handle Subsequent Events**: Each service subscribes to events relevant to its operation.
+
+```java
+@Service
+public class PaymentService {
+
+    @EventListener
+    public void handlePaymentInitiated(PaymentInitiatedEvent event) {
+        Order order = event.getOrder();
+        try {
+            processPayment(order);
+            // Publish success event for notification
+            eventPublisher.publishEvent(new PaymentSuccessEvent(order));
+        } catch (Exception e) {
+            // Publish failure event
+            eventPublisher.publishEvent(new OrderFailedEvent(order, "Payment failed: " + e.getMessage()));
+        }
+    }
+}
+```
+
+5. **Compensating Actions**: Define compensating transactions for rollback.
+
+```java
+@Service
+public class CompensationService {
+
+    @EventListener
+    public void handleOrderFailed(OrderFailedEvent event) {
+        Order order = event.getOrder();
+        // Implement compensatory actions
+        // e.g., Restocking inventory, issuing refunds, etc.
+    }
+}
+```
+
+### Using FlatMap for Chaining Events
+
+If you want to chain responses and use the result of one service as input for another, you can create a flow using Java's `CompletableFuture` or similar constructs, although this may diverge from strict choreography. Here’s a simplified example:
+
+```java
+public void processOrder(Order order) {
+    CompletableFuture<Order> orderFuture = CompletableFuture.supplyAsync(() -> {
+        createOrder(order);
+        return order;
+    });
+
+    orderFuture
+        .thenCompose(createdOrder -> CompletableFuture.supplyAsync(() -> {
+            // Call Inventory Service
+            return checkInventory(createdOrder);
+        }))
+        .thenCompose(inventoryCheck -> CompletableFuture.supplyAsync(() -> {
+            // Call Payment Service based on inventory check
+            return processPayment(inventoryCheck);
+        }))
+        .handle((result, ex) -> {
+            if (ex != null) {
+                // Handle failure
+                publishEvent(new OrderFailedEvent(order, ex.getMessage()));
+            } else {
+                // Handle success
+                publishEvent(new PaymentSuccessEvent(result));
+            }
+            return null;
+        });
+}
+```
+
+### Summary
+
+1. **Event-Driven Communication**: Services publish and subscribe to events, allowing them to communicate asynchronously.
+2. **Event Handling**: Each service listens for specific events and takes action based on the event type and payload.
+3. **Compensation Mechanism**: Implement compensating actions to roll back changes if a service fails.
+4. **Chaining with FlatMap**: Use `CompletableFuture` or similar constructs for chaining responses while maintaining asynchronous processing.
+
+This approach allows for a flexible, resilient, and decoupled architecture suitable for complex workflows in microservices.
+---
 Using parallel streams in Java can simplify and improve the performance of operations that can be executed concurrently. In the context of your Spring Boot application, particularly when processing orders, you can leverage parallel streams to handle multiple asynchronous tasks more efficiently.
 
 ### 1. Using Parallel Streams in Order Processing

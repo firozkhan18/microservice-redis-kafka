@@ -87,6 +87,7 @@ However, the sidecar pattern may not be suitable in the below scenarios:
 ## Conclusion
 
 The Sidecar Pattern offers a powerful mechanism for extending the functionality of applications while maintaining modularity, scalability, and resilience. Decoupling auxiliary concerns into separate processes promotes clean architecture and enhances the adaptability of systems to changing requirements and environments. Whether employed in logging, monitoring, security, or communication, the Sidecar Pattern continues to be a valuable tool in the arsenal of software architects and developers navigating the complexities of modern distributed systems.
+
 ---
 
 Here's a complete example of the Sidecar Pattern, including code snippets that illustrate how to implement a sidecar service in a microservices architecture.

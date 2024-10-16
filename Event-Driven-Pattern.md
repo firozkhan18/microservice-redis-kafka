@@ -1,3 +1,206 @@
+Here's a Mermaid diagram representing the event-driven microservice design pattern for the e-commerce order processing scenario described earlier. You can use this diagram to visualize the interactions between different services and the flow of events.
+
+```mermaid
+graph TD
+    A[Customer Places Order] -->|OrderCreated| B[Order Service]
+    B -->|OrderCreated| C[Inventory Service]
+    C -->|InventoryAdjusted| D[Payment Service]
+    C -->|InventoryNotAvailable| E[Notification Service]
+    D -->|PaymentProcessed| F[Shipping Service]
+    D -->|PaymentFailed| E
+    F -->|ShipmentCreated| G[Notification Service]
+
+    E -->|Notify User| H[User]
+    E -->|Notify User| H
+    F -->|Notify User| H
+```
+
+### Explanation of the Diagram
+
+- **Customer Places Order**: The process begins when the customer places an order.
+- **Order Service**: This service creates an order and emits an `OrderCreated` event.
+- **Inventory Service**: Listens for the `OrderCreated` event to check product availability and emits either `InventoryAdjusted` or `InventoryNotAvailable`.
+- **Payment Service**: Listens for `InventoryAdjusted` to process payment and emits `PaymentProcessed` or `PaymentFailed`.
+- **Shipping Service**: Listens for `PaymentProcessed` to create a shipment and emits `ShipmentCreated`.
+- **Notification Service**: Listens for `PaymentProcessed`, `PaymentFailed`, and `ShipmentCreated` to notify the user of the order status.
+
+You can render this diagram using a Mermaid live editor or in environments that support Mermaid syntax, such as Markdown documents or certain documentation tools.
+
+---
+
+Here's an example of an event-driven microservice design pattern in the context of an e-commerce application. This scenario will illustrate how different microservices interact through events, ensuring decoupled communication and asynchronous processing.
+
+### Scenario: E-Commerce Order Processing
+
+#### Microservices Involved
+
+1. **Order Service**: Manages order creation and updates.
+2. **Inventory Service**: Handles product availability and stock adjustments.
+3. **Payment Service**: Processes payments for orders.
+4. **Shipping Service**: Manages shipment of orders.
+5. **Notification Service**: Sends notifications to users about order status.
+
+### Event Flow
+
+1. **Order Creation**: When a customer places an order, the Order Service emits an `OrderCreated` event.
+2. **Inventory Adjustment**: The Inventory Service listens for the `OrderCreated` event, checks product availability, and emits either an `InventoryAdjusted` event (if the product is available) or an `InventoryNotAvailable` event (if not).
+3. **Payment Processing**: Upon receiving `InventoryAdjusted`, the Payment Service processes the payment and emits a `PaymentProcessed` event or a `PaymentFailed` event.
+4. **Shipping**: If the payment is successful (`PaymentProcessed`), the Shipping Service prepares the shipment and emits a `ShipmentCreated` event.
+5. **User Notification**: The Notification Service listens for relevant events (e.g., `PaymentProcessed`, `ShipmentCreated`) to inform the user about the order status.
+
+### Event-Driven Architecture Components
+
+#### 1. Event Bus
+
+An event bus facilitates communication between the microservices. You can use technologies like **RabbitMQ**, **Apache Kafka**, or **NATS** as the event bus.
+
+#### 2. Events
+
+Each service will define the events it produces and consumes. For example:
+
+- **OrderCreated**: `{ "orderId": "123", "userId": "456", "items": [...] }`
+- **InventoryAdjusted**: `{ "orderId": "123", "status": "success", "quantity": 1 }`
+- **PaymentProcessed**: `{ "orderId": "123", "status": "success" }`
+- **ShipmentCreated**: `{ "orderId": "123", "trackingId": "789" }`
+- **InventoryNotAvailable**: `{ "orderId": "123", "status": "failure" }`
+- **PaymentFailed**: `{ "orderId": "123", "status": "failure" }`
+
+### Example Implementation
+
+#### Order Service
+
+```java
+@RestController
+@RequestMapping("/orders")
+public class OrderService {
+
+    @Autowired
+    private EventPublisher eventPublisher;
+
+    @PostMapping
+    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
+        // Save order to database
+        // ...
+        
+        // Publish OrderCreated event
+        eventPublisher.publish(new OrderCreated(order.getId(), order.getUserId(), order.getItems()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(order);
+    }
+}
+```
+
+#### Inventory Service
+
+```java
+@Component
+public class InventoryService {
+
+    @Autowired
+    private EventPublisher eventPublisher;
+
+    @EventListener
+    public void handleOrderCreated(OrderCreated event) {
+        if (checkProductAvailability(event.getItems())) {
+            eventPublisher.publish(new InventoryAdjusted(event.getOrderId(), "success", 1));
+        } else {
+            eventPublisher.publish(new InventoryNotAvailable(event.getOrderId(), "failure"));
+        }
+    }
+
+    private boolean checkProductAvailability(List<Item> items) {
+        // Check stock levels
+        return true; // Placeholder
+    }
+}
+```
+
+#### Payment Service
+
+```java
+@Component
+public class PaymentService {
+
+    @Autowired
+    private EventPublisher eventPublisher;
+
+    @EventListener
+    public void handleInventoryAdjusted(InventoryAdjusted event) {
+        // Process payment
+        boolean paymentSuccess = processPayment(event.getOrderId());
+        if (paymentSuccess) {
+            eventPublisher.publish(new PaymentProcessed(event.getOrderId(), "success"));
+        } else {
+            eventPublisher.publish(new PaymentFailed(event.getOrderId(), "failure"));
+        }
+    }
+
+    private boolean processPayment(String orderId) {
+        // Call payment gateway
+        return true; // Placeholder
+    }
+}
+```
+
+#### Shipping Service
+
+```java
+@Component
+public class ShippingService {
+
+    @Autowired
+    private EventPublisher eventPublisher;
+
+    @EventListener
+    public void handlePaymentProcessed(PaymentProcessed event) {
+        // Prepare shipment
+        String trackingId = createShipment(event.getOrderId());
+        eventPublisher.publish(new ShipmentCreated(event.getOrderId(), trackingId));
+    }
+
+    private String createShipment(String orderId) {
+        // Logic to create shipment
+        return "tracking-123"; // Placeholder
+    }
+}
+```
+
+#### Notification Service
+
+```java
+@Component
+public class NotificationService {
+
+    @EventListener
+    public void handlePaymentProcessed(PaymentProcessed event) {
+        // Notify user about successful payment
+        notifyUser(event.getOrderId(), "Your payment was successful!");
+    }
+
+    @EventListener
+    public void handleShipmentCreated(ShipmentCreated event) {
+        // Notify user about shipment
+        notifyUser(event.getOrderId(), "Your order has been shipped!");
+    }
+
+    private void notifyUser(String orderId, String message) {
+        // Logic to send notification (email, SMS, etc.)
+    }
+}
+```
+
+### Benefits of This Design
+
+- **Decoupled Services**: Each microservice operates independently, responding to events without needing to know about other services.
+- **Scalability**: Services can be scaled individually based on their load and responsibilities.
+- **Resilience**: If one service fails, it does not directly impact others. The system can recover from partial failures.
+- **Flexibility**: New services can be added to respond to existing events without disrupting the current architecture.
+
+### Conclusion
+
+This event-driven microservice design pattern effectively illustrates how services can interact asynchronously, allowing for flexible and scalable architectures. By utilizing events, services maintain loose coupling, enabling easier updates, scaling, and maintenance.
+
+---
+
 ### Event Store
 
 An **event store** is a specialized database or storage system that is designed to store events in an event sourcing architecture. Instead of storing just the current state of an entity, an event store keeps a log of all the events that have occurred over time, which can be used to reconstruct the state of an entity at any point in time. 

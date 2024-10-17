@@ -148,6 +148,54 @@ Use the credentials you set up during the initial setup.
 3. **Create Clients** for each microservice (User Service, Order Service, Notification Service) with appropriate settings.
 4. **Create Roles** and **Users** as needed.
 
+When creating a client in Keycloak, you're essentially registering an application that will use Keycloak for authentication. Here’s how to fill out the client creation form:
+
+### Steps to Create a Client in Keycloak
+
+1. **General Settings**:
+   - **Client ID**: This is a unique identifier for your client application. It should be concise and meaningful. For example:
+     - `order-service`
+     - `user-service`
+     - `notification-service`
+   - **Name**: A human-readable name for your client. You can use something descriptive, like:
+     - `Order Service`
+     - `User Service`
+     - `Notification Service`
+   - **Description**: A brief description of what the client does. This can help others understand its purpose. For example:
+     - `Client for managing orders in the application.`
+   - **Always Display in UI**: You can leave this off unless you want this client to always appear in the Keycloak UI (useful for branding or easily identifiable applications).
+
+2. **Capability Config** (Optional):
+   - Here you can configure specific capabilities, like enabling direct access grants or setting up authorization services, depending on your application's needs.
+
+3. **Login Settings** (Optional):
+   - You may specify settings related to how users can log in to this client (e.g., allowing public access, enabling offline access).
+
+4. **Client Type**:
+   - **OpenID Connect**: This is the most common type of client for modern applications and is what you should select for most use cases.
+
+### Example Settings for a Client
+
+Here’s an example for the `Order Service` client:
+
+- **Client ID**: `order-service`
+- **Name**: `Order Service`
+- **Description**: `Client for managing orders in the application.`
+- **Always Display in UI**: Off
+
+### Additional Steps After Creation
+
+1. **Access Type**: Set the access type (public, confidential, bearer-only) based on how your service will authenticate users.
+2. **Redirect URIs**: If your application has specific redirect URIs, add them under the "Valid Redirect URIs" section.
+3. **Save the Client**: After filling out the form, click on **Save**.
+
+### Post-Creation
+
+Once the client is created, you can configure settings like:
+- Client secrets (for confidential clients).
+- Mappers to map roles or user attributes.
+- Client scopes to specify what permissions the client has.
+
 It looks like you're in the process of creating a new realm in Keycloak and you're seeing the configuration options. Here's a quick guide on what each of those fields means and how to proceed:
 
 ### Realm Configuration Fields

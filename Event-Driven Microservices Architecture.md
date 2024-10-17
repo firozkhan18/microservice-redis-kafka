@@ -245,6 +245,53 @@ When configuring a client in Keycloak, the settings you choose will depend on ho
 1. After configuring these options, click **Save**.
 2. You can further configure your client by adding redirect URIs, scopes, and client mappers based on your application's needs.
 
+When configuring the **General Settings** for a client in Keycloak, you'll need to provide several important URLs that dictate how your application interacts with Keycloak. Here's a breakdown of each setting:
+
+### General Settings Breakdown
+
+1. **Root URL**:
+   - This is the base URL of your application. It’s where Keycloak will redirect users after authentication. 
+   - **Example**: `http://localhost:3000` (for a local application)
+
+2. **Home URL**:
+   - This URL is typically where users are directed after logging in successfully. It's often the landing page of your application.
+   - **Example**: `http://localhost:3000/home`
+
+3. **Valid Redirect URIs**:
+   - These are the URIs to which Keycloak can redirect users after authentication. It's crucial for security to restrict this to known locations.
+   - **Example**: 
+     - `http://localhost:3000/*` (to allow any path under this domain)
+     - `http://localhost:3000/callback` (specific callback path for handling login responses)
+
+4. **Valid Post Logout Redirect URIs**:
+   - This setting specifies where users can be redirected after they log out. Like redirect URIs, these should be restricted to known locations for security.
+   - **Example**: 
+     - `http://localhost:3000/` (to redirect to the home page after logout)
+     - `http://localhost:3000/logout-success` (a specific page indicating a successful logout)
+
+5. **Web Origins**:
+   - This setting specifies the allowed origins for CORS (Cross-Origin Resource Sharing). It determines which domains can make requests to your Keycloak server.
+   - **Example**: 
+     - `http://localhost:3000` (if your app is running on this domain)
+     - `*` (to allow all domains, but this is not recommended for production)
+
+### Example Configuration for Order Service Client
+
+- **Root URL**: `http://localhost:3000`
+- **Home URL**: `http://localhost:3000/home`
+- **Valid Redirect URIs**: 
+  - `http://localhost:3000/*`
+- **Valid Post Logout Redirect URIs**: 
+  - `http://localhost:3000/`
+- **Web Origins**: 
+  - `http://localhost:3000`
+
+### Final Steps
+
+1. After entering these values, click **Save**.
+2. You can further adjust configurations based on your application needs, especially if you have different environments (like development, staging, production).
+
+
 It looks like you're in the process of creating a new realm in Keycloak and you're seeing the configuration options. Here's a quick guide on what each of those fields means and how to proceed:
 
 ### Realm Configuration Fields

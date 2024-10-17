@@ -45,9 +45,9 @@ This document outlines a comprehensive microservices architecture that includes:
 
 graph TD
     A[Load Balancer - Nginx or Traefik] --> B[Kafka Broker]
-    B --> C[Order Service<br>(Protected API)]
-    B --> D[User Service<br>(Protected API)]
-    B --> E[Notification Service<br>(Protected API)]
+    B --> C[Order Service - Protected API]
+    B --> D[User Service - Protected API]
+    B --> E[Notification Service - Protected API]
     D --> F[Keycloak]
     E --> F
     C --> F

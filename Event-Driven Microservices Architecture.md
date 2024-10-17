@@ -326,48 +326,6 @@ This document provides a detailed guide to creating an event-driven microservice
 ---
 
 Sure! Here's an elaboration on the components of your architecture, focusing on Kafka and its key concepts such as clusters, containers, consumer groups, producers, partitions, offsets, leaders, followers, and more. I'll also update the diagram to reflect these concepts.
-
-```mermaid
-graph TD
-    A[Load Balancer - Nginx/Traefik] --> B[Kafka Broker]
-    B --> C[Order Service - Protected API]
-    B --> D[User Service - Protected API]
-    B --> E[Notification Service - Protected API]
-    D --> F[Keycloak]
-    E --> F
-    C --> F
-
-   %% subgraph Kafka Cluster
-        direction TB
-        B[Kafka Broker]
-        P1[Partition 1]
-        P2[Partition 2]
-        P3[Partition 3]
-        L1[Leader]
-        F1[Follower 1]
-        F2[Follower 2]
-        C1[Consumer Group 1]
-        C2[Consumer Group 2]
-        Producer[Producer]
-        EventStore[Event Store]
-        EventBus[Event Bus]
-        EventSource[Event Source]
-    end
-
-    B --> P1
-    B --> P2
-    B --> P3
-    P1 --> L1
-    P1 --> F1
-    P1 --> F2
-    C1 --> P1
-    C2 --> P2
-    Producer --> B
-    EventStore --> B
-    EventBus --> B
-    EventSource --> B
-```
-
 ```mermaid
 
 graph TD

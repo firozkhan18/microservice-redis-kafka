@@ -148,6 +148,41 @@ Use the credentials you set up during the initial setup.
 3. **Create Clients** for each microservice (User Service, Order Service, Notification Service) with appropriate settings.
 4. **Create Roles** and **Users** as needed.
 
+It looks like you're in the process of creating a new realm in Keycloak and you're seeing the configuration options. Here's a quick guide on what each of those fields means and how to proceed:
+
+### Realm Configuration Fields
+
+1. **Realm Name**: 
+   - This is the unique identifier for the realm. It's important that you don't use "master" for new realms, as "master" is the default realm used for administrative purposes.
+   - Suggested name: `myrealm` or something relevant to your application.
+
+2. **Display Name**: 
+   - This is the name that users will see when they interact with your Keycloak instance. You can set it to something descriptive, like `My Application`.
+
+3. **HTML Display Name**: 
+   - This field allows you to input HTML if you want to customize the display name further. You can keep it simple, like:
+     ```html
+     <div class="kc-logo-text"><span>My Application</span></div>
+     ```
+
+4. **Frontend URL**: 
+   - This is the URL of your application's frontend. You can set it to the URL where your application will be accessible, such as `http://localhost:3000`.
+
+5. **Require SSL**: 
+   - This setting indicates whether SSL is required for your realm. If you're developing locally and not using SSL, you can leave this unchecked. However, in production, you should always require SSL.
+
+6. **External Requests**: 
+   - This section deals with how external requests are handled. Typically, you can leave the default settings unless you have specific needs.
+
+7. **ACR to LoA Mapping**: 
+   - ACR (Authentication Context Class Reference) and LoA (Level of Assurance) mapping is used for defining the level of assurance needed for different types of authentication. If you don't have specific requirements, you can skip this for now.
+
+### Next Steps
+
+1. Fill out the fields as needed and click **"Save"** to create the realm.
+2. After creating the realm, you can proceed to add clients for your microservices, as mentioned earlier.
+
+
 ## 2. Microservices Setup
 
 ### User Service

@@ -368,6 +368,49 @@ graph TD
     EventSource --> B
 ```
 
+```mermaid
+
+graph TD
+    A[Load Balancer - Nginx/Traefik] --> B[Kafka Broker]
+    B --> C[Order Service - Protected API]
+    B --> D[User Service - Protected API]
+    B --> E[Notification Service - Protected API]
+    D --> F[Keycloak]
+    E --> F
+    C --> F
+
+    %% Define Kafka Cluster as a subgraph
+    subgraph Kafka_Cluster [Kafka Cluster]
+        direction TB
+        K_B[Kafka Broker]
+        P1[Partition 1]
+        P2[Partition 2]
+        P3[Partition 3]
+        L1[Leader]
+        F1[Follower 1]
+        F2[Follower 2]
+        C1[Consumer Group 1]
+        C2[Consumer Group 2]
+        Producer[Producer]
+        EventStore[Event Store]
+        EventBus[Event Bus]
+        EventSource[Event Source]
+
+        K_B --> P1
+        K_B --> P2
+        K_B --> P3
+        P1 --> L1
+        P1 --> F1
+        P1 --> F2
+        C1 --> P1
+        C2 --> P2
+        Producer --> K_B
+        EventStore --> K_B
+        EventBus --> K_B
+        EventSource --> K_B
+    end
+
+```
 ### Detailed Explanation of Components
 
 #### 1. **Kafka Cluster**

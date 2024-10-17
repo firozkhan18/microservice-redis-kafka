@@ -291,6 +291,80 @@ When configuring the **General Settings** for a client in Keycloak, you'll need 
 1. After entering these values, click **Save**.
 2. You can further adjust configurations based on your application needs, especially if you have different environments (like development, staging, production).
 
+Creating roles and users in Keycloak is an essential part of setting up your security and access control for your applications. Here’s how you can do it step by step:
+
+### Creating Roles
+
+1. **Access the Keycloak Admin Console**:
+   - Navigate to `http://localhost:9090/auth/admin` and log in with your admin credentials.
+
+2. **Select Your Realm**:
+   - From the dropdown menu at the top left, select the realm you want to configure (e.g., `myrealm`).
+
+3. **Go to the Roles Section**:
+   - Click on **Roles** in the left menu.
+
+4. **Add a New Role**:
+   - Click on the **Add Role** button.
+   - Fill in the **Role Name** (e.g., `user`, `admin`, `order-service`, etc.) and add a **Description** if needed.
+   - Click **Save**.
+
+5. **Repeat for Additional Roles**:
+   - Create other roles as necessary following the same steps.
+
+### Creating Users
+
+1. **Access the Users Section**:
+   - In the left menu, click on **Users**.
+
+2. **Add a New User**:
+   - Click on the **Add User** button.
+   - Fill in the user details:
+     - **Username**: (e.g., `johndoe`)
+     - **First Name**: (e.g., `John`)
+     - **Last Name**: (e.g., `Doe`)
+     - **Email**: (e.g., `johndoe@example.com`)
+     - **Enabled**: Make sure to enable the user.
+   - Click **Save**.
+
+3. **Set Password for the User**:
+   - After saving, you'll be taken to the user details page. 
+   - Go to the **Credentials** tab.
+   - Enter a new password and set **Temporary** to `Off` if you don’t want the user to reset their password on first login.
+   - Click **Set Password**.
+
+4. **Assign Roles to the User**:
+   - Still in the user details page, navigate to the **Role Mappings** tab.
+   - Under **Available Roles**, find the roles you created earlier.
+   - Select the desired roles and click the **Add selected** button to assign them to the user.
+
+5. **Repeat for Additional Users**:
+   - Create additional users as necessary, following the same steps.
+
+### Example Roles and Users Setup
+
+- **Roles**:
+  - `admin`: Full access to the application.
+  - `user`: Basic access to user-related features.
+  - `order-service`: Specific access for the order service.
+
+- **Users**:
+  - **User**: 
+    - Username: `johndoe`
+    - Roles: `user`
+  - **Admin**: 
+    - Username: `admin`
+    - Roles: `admin`
+  - **Order Service User**: 
+    - Username: `order-service-user`
+    - Roles: `order-service`
+
+### Final Steps
+
+1. After creating users and assigning roles, inform your users of their credentials and roles.
+2. You may also want to configure additional settings like groups or identity providers as needed for your application.
+
+---
 
 It looks like you're in the process of creating a new realm in Keycloak and you're seeing the configuration options. Here's a quick guide on what each of those fields means and how to proceed:
 

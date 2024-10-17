@@ -44,7 +44,7 @@ This document outlines a comprehensive microservices architecture that includes:
 ```mermaid
 
 graph TD
-    A[Load Balancer - (Nginx/Traefik)] --> B[Kafka Broker]
+    A[Load Balancer - Nginx or Traefik] --> B[Kafka Broker]
     B --> C[Order Service<br>(Protected API)]
     B --> D[User Service<br>(Protected API)]
     B --> E[Notification Service<br>(Protected API)]

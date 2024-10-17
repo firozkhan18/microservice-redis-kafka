@@ -364,6 +364,60 @@ Creating roles and users in Keycloak is an essential part of setting up your sec
 1. After creating users and assigning roles, inform your users of their credentials and roles.
 2. You may also want to configure additional settings like groups or identity providers as needed for your application.
 
+To create a user in Keycloak with the provided information, follow these steps in the Keycloak Admin Console:
+
+### Creating a User in Keycloak
+
+1. **Access the Keycloak Admin Console**:
+   - Go to `http://localhost:9090/auth/admin` and log in with your admin credentials.
+
+2. **Select Your Realm**:
+   - Ensure you are in the correct realm (e.g., `myrealm`). You can select it from the dropdown in the top left corner.
+
+3. **Navigate to Users**:
+   - In the left-hand menu, click on **Users**.
+
+4. **Add a New User**:
+   - Click the **Add User** button.
+
+5. **Fill in User Details**:
+   - **Username**: Enter `Firoz Khan` (Note: the username should not contain spaces; you might want to use `firozkhan` or `firoz.khan` instead).
+   - **Email**: Enter `mr.ferozkhan@gmail.com`.
+   - **First Name**: Enter `Firoz`.
+   - **Last Name**: Enter `Khan`.
+   - **Email Verified**: Keep this **Off** if you don’t want to verify the email immediately.
+   - Make sure **Enabled** is checked.
+
+6. **Save the User**:
+   - Click **Save** to create the user.
+
+7. **Set User Credentials**:
+   - After saving, you will be directed to the user's details page.
+   - Go to the **Credentials** tab.
+   - Set a password for the user. Make sure to set **Temporary** to `Off` if you want them to keep the password without needing to change it upon first login.
+   - Click **Set Password**.
+
+8. **Assign Roles** (if needed):
+   - Navigate to the **Role Mappings** tab.
+   - Under **Available Roles**, select the roles you want to assign to this user and click **Add selected**.
+
+9. **Groups** (if needed):
+   - If you have any specific groups set up, you can add the user to those by navigating to the **Groups** tab and selecting the desired groups.
+
+### Summary of User Details
+
+- **Username**: `firozkhan` (or `Firoz.Khan`)
+- **Email**: `mr.ferozkhan@gmail.com`
+- **First Name**: `Firoz`
+- **Last Name**: `Khan`
+- **Email Verified**: Off
+
+### Final Steps
+
+1. Once the user is created and configured, communicate their username and password to them.
+2. You can also set up roles and group memberships as needed for your application's access control.
+
+
 ---
 
 It looks like you're in the process of creating a new realm in Keycloak and you're seeing the configuration options. Here's a quick guide on what each of those fields means and how to proceed:

@@ -55,17 +55,91 @@ graph TD
 
 ## 1. Setting Up Keycloak
 
-### Install Keycloak
+
+### Steps to Correctly Pull Keycloak Image
+
+### Pull the Correct Image**:
+   Use the following command to pull the updated Keycloak image:
+   ```bash
+   docker pull keycloak/keycloak
+   ```
+
+### Install & Run Keycloak
 
 Run Keycloak using Docker:
 
 ```bash
-docker run -d -p 8080:8080 \
-  -e KEYCLOAK_USER=admin \
-  -e KEYCLOAK_PASSWORD=admin \
-  --name keycloak \
-  jboss/keycloak
+docker run -d -p 9090:8080 \
+     -e KC_BOOTSTRAP_ADMIN_USERNAME=admin \
+     -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin \
+     --name keycloak \
+     keycloak/keycloak start-dev
 ```
+
+### Accessing Keycloak
+
+Once the container is running, you can access Keycloak by navigating to:
+```
+http://localhost:9090
+```
+
+## To resolve the issue of creating a temporary administrative user, you have two options:
+
+### Option 1: Access Keycloak Locally
+
+1. **Start Keycloak**: If you haven't already, run the Keycloak container:
+
+   ```bash
+   docker run -d -p 9090:8080 \
+     --name keycloak \
+     keycloak/keycloak start-dev
+   ```
+
+2. **Open the Browser**: Go to [http://localhost:9090](http://localhost:9090).
+
+3. **Follow the Prompts**: You should see a prompt to create a temporary administrative user. Follow the instructions to set up your admin account.
+
+### Option 2: Set Environment Variables
+
+If you want to set the administrative username and password without accessing the browser, you can use the `KC_BOOTSTRAP_ADMIN_USERNAME` and `KC_BOOTSTRAP_ADMIN_PASSWORD` environment variables when starting Keycloak.
+
+Here’s how to do it:
+
+1. **Stop and Remove the Existing Container** (if necessary):
+
+   ```bash
+   docker stop keycloak
+   docker rm keycloak
+   ```
+
+2. **Run Keycloak with Environment Variables**:
+
+   ```bash
+   docker run -d -p 9090:8080 \
+     -e KC_BOOTSTRAP_ADMIN_USERNAME=admin \
+     -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin \
+     --name keycloak \
+     keycloak/keycloak start-dev
+   ```
+
+### Breakdown of the Command:
+- `docker run -d`: Runs the container in detached mode (in the background).
+- `-p 9090:8080`: Maps port 9090 on your host to port 8080 in the container (the port Keycloak listens on).
+- `-e KEYCLOAK_USER=admin`: Sets the admin username to "admin".
+- `-e KEYCLOAK_PASSWORD=admin`: Sets the admin password to "admin".
+- `--name keycloak`: Names the container "keycloak".
+- `keycloak/keycloak`: Specifies the Keycloak image to use.
+- `start-dev`: Starts Keycloak in development mode.
+- 
+### Access Keycloak
+
+After using either option, you should be able to access Keycloak at:
+
+```
+http://localhost:9090
+```
+
+Use the credentials you set up during the initial setup.
 
 ### Configure Realm and Clients
 

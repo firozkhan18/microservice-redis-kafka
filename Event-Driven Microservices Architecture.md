@@ -329,10 +329,10 @@ Sure! Here's an elaboration on the components of your architecture, focusing on 
 
 ```mermaid
 graph TD
-    A[Load Balancer<br>(Nginx/Traefik)] --> B[Kafka Broker]
-    B --> C[Order Service<br>(Protected API)]
-    B --> D[User Service<br>(Protected API)]
-    B --> E[Notification Service<br>(Protected API)]
+    A[Load Balancer - Nginx/Traefik] --> B[Kafka Broker]
+    B --> C[Order Service - Protected API]
+    B --> D[User Service - Protected API]
+    B --> E[Notification Service - Protected API]
     D --> F[Keycloak]
     E --> F
     C --> F
@@ -408,15 +408,15 @@ Here's a detailed elaboration of the microservices architecture diagram, includi
 
 ```mermaid
 graph TD
-    A[Load Balancer<br>(Nginx/Traefik)] --> B[Kafka Broker]
-    B --> C[Order Service<br>(Protected API)]
-    B --> D[User Service<br>(Protected API)]
-    B --> E[Notification Service<br>(Protected API)]
+    A[Load Balancer - Nginx/Traefik] --> B[Kafka Broker]
+    B --> C[Order Service - Protected API]
+    B --> D[User Service Protected API]
+    B --> E[Notification Service - Protected API]
     D --> F[Keycloak]
     E --> F
     C --> F
 
-    %% Kafka Cluster Components
+    Kafka Cluster Components
     subgraph Kafka_Cluster [Kafka Cluster]
         direction TB
         B1[Kafka Broker 1]
@@ -425,7 +425,7 @@ graph TD
         Controller[Controller]
     end
 
-    %% Consumer Groups
+    Consumer Groups
     subgraph Consumer_Groups [Consumer Groups]
         direction TB
         CG1[Order Service Consumer Group]
@@ -433,7 +433,7 @@ graph TD
         CG3[Notification Service Consumer Group]
     end
 
-    %% Topics and Partitions
+    Topics and Partitions
     subgraph Topics [Topics and Partitions]
         direction TB
         T1[Order Topic]
@@ -445,7 +445,7 @@ graph TD
         P4[P4]
     end
 
-    %% Connections
+    Connections
     B -->|Produces Messages| T1
     B -->|Produces Messages| T2
     B -->|Produces Messages| T3
@@ -454,25 +454,25 @@ graph TD
     T2 -->|Contains Partitions| P3
     T3 -->|Contains Partitions| P4
 
-    %% Consumer Group Connections
+    Consumer Group Connections
     C -->|Consumes from| CG1
     D -->|Consumes from| CG2
     E -->|Consumes from| CG3
 
-    %% Leader and Follower
+    Leader and Follower
     B1 -->|Leader| P1
     B2 -->|Follower| P1
     B3 -->|Follower| P1
     B1 -->|Leader| P2
     B2 -->|Follower| P2
 
-    %% Offset Management
+    Offset Management
     P1 -->|Offset| O1[Offset Tracker]
     P2 -->|Offset| O2[Offset Tracker]
     P3 -->|Offset| O3[Offset Tracker]
     P4 -->|Offset| O4[Offset Tracker]
 
-    %% Event Store and Event Bus
+    Event Store and Event Bus
     B -->|Event Store| ES[Event Store]
     B -->|Event Bus| EB[Event Bus]
 ```

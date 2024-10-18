@@ -319,7 +319,7 @@ Figure 7: Copy jwt public key value
 **secured micro-service**
 ```
 security.oauth2.client.client-id=employee-service
-security.oauth2.client.client-secret=68977d81-c59b-49aa-aada-58da9a43a850
+security.oauth2.client.client-secret=XXXXXXXXX
 security.oauth2.client.user-authorization-uri=${rest.security.issuer-uri}/protocol/openid-connect/auth
 security.oauth2.client.access-token-uri=${rest.security.issuer-uri}/protocol/openid-connect/token
 security.oauth2.client.scope=openid
